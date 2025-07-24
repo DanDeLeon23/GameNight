@@ -52,11 +52,6 @@ app.get('/profile', (req, res) => {
   res.json(req.user || {});
 });
 
-// Start server
-app.listen(process.env.PORT, () => {
-  console.log(`✅ Server running at http://localhost:${process.env.PORT}`);
-});
-
 // Route to get the user's Steam friends list
 app.get('/friends', async (req, res) => {
   if (!req.user || !req.user.id) {
@@ -123,3 +118,25 @@ app.get('/friends/details', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch friend details' });
   }
 });
+
+app.get('/games/:steamid', async (req, res) => {
+    const steamid = req.params.steamid;
+    const url = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${process.env.STEAM_API_KEY}&steamid=${steamid}&include_appinfo=true&include_played_free_games=true`;
+
+    try{
+        const response = await axios.get(url)
+        const games = response.data.response.games || []
+        res.json(games);
+    } catch (error) {
+        console.error('Error fetching games:', error);
+        res.status(500).json({ error: 'Failed to fetch games' });
+    }
+})
+
+
+
+// Start server
+app.listen(process.env.PORT, () => {
+  console.log(`✅ Server running at http://localhost:${process.env.PORT}`);
+});
+
