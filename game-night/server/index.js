@@ -137,6 +137,6 @@ app.get('/games/:steamid', async (req, res) => {
 
 // Start server
 app.listen(process.env.PORT, () => {
-  console.log(`✅ Server running at http://localhost:${process.env.PORT}`);
+  console.log(`✅ Server running at http://localhost:${process.env.PORT}`); //the check is pretty cool looking
 });
 
